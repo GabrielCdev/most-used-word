@@ -16,7 +16,7 @@ async function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      
+
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -36,7 +36,8 @@ async function createWindow() {
 
   // Lifecycle controller during the load
   win.webContents.on('did-finish-load', () => {
-    console.log('Finished!!!')
+    const { title, version } = require('../package.json')
+    win.setTitle(`${title} :: ${version}`)
   })
 
   win.on('closed', () => {
