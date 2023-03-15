@@ -26,6 +26,8 @@
 </template>
 
 <script>
+// ipcRenderer = Usado para disparar o evento na interface gráfica quando o usuário selecionar o ProcessSubtitle
+// import { ipcRenderer } from "electron";
 import Pill from "./Pill";
 
 export default {
@@ -34,16 +36,21 @@ export default {
   data: function () {
     return {
       files: [],
-      groupedWords: [
-        { name: "i", amount: 1234 },
-        { name: "you", amount: 900 },
-        { name: "he", amount: 853 },
-      ],
+      groupedWords: [],
     };
   },
   methods: {
     processSubtitles() {
-      console.log(this.files);
+      // Pegar apenas os paths
+      const paths = this.files.map(f => f.path)
+
+      // Comunicação async
+      // Enviar para o canal de comunicação (process-subtitles) um determinado parâmetro (files)
+      window.Electron.ipcRenderer.send("process-subtitles", paths);
+      // Receber uma resposta no mesmo canal que envia (process-subtitles) - podia ser em outro canal, basta mudar aqui e no backend)
+      window.Electron.ipcRenderer.on("process-subtitles", (event, resp) => {
+        this.groupedWords = resp;
+      });
     },
   },
 };
