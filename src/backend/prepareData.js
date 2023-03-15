@@ -12,7 +12,8 @@ module.exports = (rows) => {
         .map(removeTags)
         .reduce(mergeRows)
         .split(" ")
-        .map((word) => word.toLowerCase());
+        .map((word) => word.toLowerCase())
+        .map((word) => word.replace('"', ""));
 
       resolve(words);
     } catch (e) {
